@@ -1,5 +1,5 @@
-Everything is OSM
-=================
+Everything is OSM!
+==================
 
 Super easy setup for getting a postgis database running with OpenStreetMap
 [metro extracts](https://mapzen.com/metro-extracts/). More free time for your
@@ -7,7 +7,7 @@ OSM community!
 
 
 First
-=====
+-----
 
 Install recent versions of these:
 
@@ -17,7 +17,7 @@ Install recent versions of these:
 
 
 Then
-====
+----
 
 Choose which metro areas you want to use. Edit `variables.yml` so that the last
 line contains a list of [metro extracts](https://mapzen.com/metro-extracts/)
@@ -42,7 +42,7 @@ but you can change them.
 
 
 More Customizing
-================
+----------------
 
 
 You can change the username, password and database name by in `variables.yml`.
