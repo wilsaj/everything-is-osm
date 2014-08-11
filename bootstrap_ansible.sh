@@ -8,7 +8,7 @@ apt-get -y install ansible
 
 # set things up so root can do key-based ssh (no password prompt) to
 # vagrant@localhost
-rm /root/.ssh/id_rsa
+rm -f /root/.ssh/id_rsa*
 ssh-keygen -f /root/.ssh/id_rsa -P ""
 cat /root/.ssh/id_rsa.pub >> /home/vagrant/.ssh/authorized_keys
 ssh-keyscan localhost > /root/.ssh/known_hosts
