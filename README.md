@@ -43,6 +43,13 @@ Tilemill:
 
 
 
+Stopping
+--------
+
+To stop the server, run `vagrant halt`.
+
+
+
 Customize it
 ------------
 
