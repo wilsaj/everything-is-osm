@@ -30,12 +30,11 @@ that you want to include. For example:
 
 
 
-Then from the command line, just run `vagrant up`
-
-
-After it does its thing, a postgis database will be available at port 5432 with
-osm data available for use! For example, you can use this string to connect to
-the PostGIS database from Tilemill:
+Then from the command line, just run `vagrant up` and give it a few minutes to
+do it does its thing. When it finishes running, a PostGIS database will be ready
+to go and loaded up with OSM data! Connect to the database on port 5432. For
+example, you can use this string to connect to the PostGIS database from
+Tilemill:
 
     dbname=osm host=localhost port=5432 user=osm password=osm
 
