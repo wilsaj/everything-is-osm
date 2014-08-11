@@ -35,8 +35,8 @@ Run:
     vagrant up
 
 
-After it does it's thing, a postgis database will be available at port 5432 with
-osm data available for use! Default database name, user and password are "osm",
+After it does its thing, a postgis database will be available at port 5432 with
+osm data available for use! Default database name, user, and password are "osm",
 but you can change them.
 
 
