@@ -20,7 +20,7 @@ Then
 ----
 
 Choose which metro areas you want to use. Edit `variables.yml` so that the last
-line contains a list of [metro extracts](https://mapzen.com/metro-extracts/)
+line contains a list of the [metro extracts](https://mapzen.com/metro-extracts/)
 that you want to include. For example:
 
     metro_extracts:
@@ -30,9 +30,7 @@ that you want to include. For example:
 
 
 
-Run:
-
-    vagrant up
+Then from the command line, just run `vagrant up`
 
 
 After it does its thing, a postgis database will be available at port 5432 with
@@ -57,8 +55,8 @@ If you want to connect to a different port than localhost:5432, just change the
 value for the host parameter in the `Vagrantfile`. For example, to connect to
 port 15342 instead, change this line:
 
-  config.vm.network :forwarded_port, guest: 5432, host: 5432
+    config.vm.network :forwarded_port, guest: 5432, host: 5432
 
 to:
 
-  config.vm.network :forwarded_port, guest: 5432, host: 15432
+    config.vm.network :forwarded_port, guest: 5432, host: 15432
