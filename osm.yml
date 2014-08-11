@@ -46,7 +46,12 @@
     with_items: metro_extracts
     sudo: no
 
-  - name: import metro extracts into database
+  - name: import metro first extract into database
     command: osm2pgsql  --create --slim --cache 200 --cache-strategy sparse --multi-geometry --host localhost --database {{ db_name }} --user {{ db_user }} /tmp/{{ item }}.osm.pbf
-    with_items: metro_extracts
+    with_items: metro_extracts|first
+    sudo: no
+
+  - name: import other metro extracts into database
+    command: osm2pgsql  --append --slim --cache 200 --cache-strategy sparse --multi-geometry --host localhost --database {{ db_name }} --user {{ db_user }} /tmp/{{ item }}.osm.pbf
+    with_items: metro_extracts[1:]
     sudo: no

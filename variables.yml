@@ -8,3 +8,4 @@ db_port: 5432
 # should be the filename
 metro_extracts:
   - "austin"
+  - "portland"
