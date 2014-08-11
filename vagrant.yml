@@ -5,6 +5,9 @@
   vars_files:
     - variables.yml
 
+  handlers:
+    - include: handlers.yml
+
   tasks:
   - name: add public key to vagrant's authorized_keys file
     authorized_key: user=vagrant key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"

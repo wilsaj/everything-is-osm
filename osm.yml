@@ -11,6 +11,14 @@
   - name: install osm2pgsql
     apt: pkg=osm2pgsql
 
+  - name: write postgres.conf file
+    template: src=templates/postgresql.conf.j2 dest=/etc/postgresql/9.3/main/postgresql.conf
+    notify: restart postgresql
+
+  - name: write pg_hba.conf file
+    template: src=templates/pg_hba.conf.j2 dest=/etc/postgresql/9.3/main/pg_hba.conf
+    notify: restart postgresql
+
   - name: create .pgpass file
     template: src=templates/pgpass.j2 dest=~/.pgpass mode=0600
     sudo: no
