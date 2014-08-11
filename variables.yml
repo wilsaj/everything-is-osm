@@ -2,7 +2,6 @@
 db_user: "osm"
 db_password: "osm"
 db_name: "osm"
-db_port: 5432
 
 # list of metro areas to download from https://mapzen.com/metro-extracts/
 # should be the filename
