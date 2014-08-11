@@ -9,8 +9,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # options are documented and commented below. For a complete reference,
   # please see the online documentation at vagrantup.com.
 
+  if ['foo'].pack('p').size == 8
+    bits = "64"
+   else
+    bits = "32"
+  end
+ 
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "ubuntu/trusty64"
+  config.vm.box = "ubuntu/trusty" + bits
 
   # The url from where the 'config.vm.box' box will be fetched if it
   # doesn't already exist on the user's system.
