@@ -13,4 +13,4 @@
     authorized_key: user=vagrant key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
     sudo: no
 
-  - include: osm.yml
+  - include: osm_tasks.yml
