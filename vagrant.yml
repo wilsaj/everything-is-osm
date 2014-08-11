@@ -1,0 +1,13 @@
+---
+- hosts: all
+  sudo: yes
+
+  vars_files:
+    - variables.yml
+
+  tasks:
+  - name: add public key to vagrant's authorized_keys file
+    authorized_key: user=vagrant key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+    sudo: no
+
+  - include: osm.yml
