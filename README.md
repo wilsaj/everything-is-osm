@@ -12,7 +12,7 @@ First
 Install recent versions of these:
 
 - [Vagrant](http://vagrantup.com/)
-- [Ansible](http://docs.ansible.com/)
+- [Virtualbox](https://www.virtualbox.org/)
 
 
 
