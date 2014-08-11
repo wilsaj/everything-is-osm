@@ -1,7 +1,7 @@
 Everything is OSM
 =================
 
-Super easy setup for getting a postgis database running with OpenStreetMap
+A super easy way to setup PostGIS with OpenStreetMap
 [metro extracts](https://mapzen.com/metro-extracts/). More free time for your
 OSM community!
 
