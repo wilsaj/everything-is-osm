@@ -14,7 +14,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
    else
     bits = "32"
   end
- 
+
   # Every Vagrant virtual environment requires a box to build off of.
   config.vm.box = "ubuntu/trusty" + bits
 
@@ -62,13 +62,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #
   # View the documentation for the provider you're using for more
   # information on available options.
-
-  config.vm.provision :ansible do |ansible|
-    ansible.playbook = "vagrant.yml"
-    ansible.extra_vars = {
-        vagrant: true,
-    }
-  end
+  
+  config.vm.provision "shell", path: "bootstrap_ansible.sh"
 
   # Enable provisioning with Puppet stand alone.  Puppet manifests
   # are contained in a directory path relative to this Vagrantfile.
