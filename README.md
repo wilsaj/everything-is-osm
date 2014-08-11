@@ -36,15 +36,29 @@ Run:
 
 
 After it does its thing, a postgis database will be available at port 5432 with
-osm data available for use! Default database name, user, and password are "osm",
-but you can change them.
+osm data available for use! For example, you can use this string to connect to
+the PostGIS database from Tilemill:
+
+    dbname=osm host=localhost port=5432 user=osm password=osm
+
+
+![Tilemill Screenshot](tilemill-screenshot.png)
 
 
 
-More Customizing
-----------------
+Customize it
+------------
+
+The default database name, user, and password are "osm", but you can change them
+by editing `variables.yml`.
 
 
-You can change the username, password and database name by in `variables.yml`.
+If you want to connect to a different port than localhost:5432, just change the
+value for the host parameter in the `Vagrantfile`. For example, to connect to
+port 15342 instead, change this line:
 
-To serve out of a different port, edit `Vagrantfile`.
+  config.vm.network :forwarded_port, guest: 5432, host: 5432
+
+to:
+
+  config.vm.network :forwarded_port, guest: 5432, host: 15432
