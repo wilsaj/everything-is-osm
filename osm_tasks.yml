@@ -41,17 +41,58 @@
     sudo_user: postgres
     command: psql -d {{ db_name }} -c 'CREATE EXTENSION IF NOT EXISTS hstore;'
 
+  - name: make osm dir
+    file: path={{ osm_dir}} recurse=yes state=directory owner={{ ansible_ssh_user }}
+    when: metro_extracts
+
+  - name: make metro extract dir
+    file: path={{ metro_tmp_dir}} recurse=yes state=directory
+    when: metro_extracts
+    sudo: no
+
   - name: download metro extracts
-    get_url: url=https://s3.amazonaws.com/metro-extracts.mapzen.com/{{ item }}.osm.pbf dest=/tmp/{{ item }}.osm.pbf
+    get_url: url=https://s3.amazonaws.com/metro-extracts.mapzen.com/{{ item }}.osm.pbf dest={{ metro_tmp_dir }}/{{ item }}.osm.pbf
     with_items: metro_extracts
+    when: metro_extracts
     sudo: no
 
-  - name: import metro first extract into database
-    command: osm2pgsql  --create --slim --cache 100 --cache-strategy sparse --multi-geometry --host localhost --database {{ db_name }} --user {{ db_user }} /tmp/{{ item }}.osm.pbf
+  - name: make geofabrik extract dirs
+    file: path={{ geofabrik_tmp_dir}}/{{ item | dirname }} recurse=yes state=directory
+    with_items: geofabrik_extracts
+    when: geofabrik_extracts
+    sudo: no
+
+  - name: download geofabrik extracts
+    get_url: url=http://download.geofabrik.de/{{ item }}-latest.osm.pbf dest={{ geofabrik_tmp_dir}}/{{ item }}.osm.pbf
+    with_items: geofabrik_extracts
+    sudo: no
+
+  - name: create database and import first metro extract
+    command: osm2pgsql  --create --slim --cache 100 --cache-strategy sparse --multi-geometry --host localhost --database {{ db_name }} --user {{ db_user }} {{ metro_tmp_dir}}/{{ item }}.osm.pbf
     with_items: metro_extracts|first
+    when: metro_extracts
     sudo: no
 
-  - name: import other metro extracts into database
-    command: osm2pgsql  --append --slim --cache 100 --cache-strategy sparse --multi-geometry --host localhost --database {{ db_name }} --user {{ db_user }} /tmp/{{ item }}.osm.pbf
-    with_items: metro_extracts[1:]
+  - name: append the rest of the metro extracts to the database
+    command: osm2pgsql  --append --slim --cache 100 --cache-strategy sparse --multi-geometry --host localhost --database {{ db_name }} --user {{ db_user }} {{ metro_tmp_dir}}/{{ item }}.osm.pbf
+    with_items: metro_extracts[1:] if metro_extracts else []
+    when: metro_extracts
+    sudo: no
+
+  - name: create database and import first geofabrik extract
+    command: osm2pgsql  --create --slim --cache 100 --cache-strategy sparse --host localhost --database {{ db_name }} --user {{ db_user }} {{ geofabrik_tmp_dir }}/{{ item }}.osm.pbf
+    with_items: geofabrik_extracts|first
+    when: geofabrik_extracts and not metro_extracts
+    sudo: no
+
+  - name: don't create database and append first geofabrik extract
+    command: osm2pgsql  --append --slim --cache 100 --cache-strategy sparse --host localhost --database {{ db_name }} --user {{ db_user }} {{ geofabrik_tmp_dir }}/{{ item }}.osm.pbf
+    with_items: geofabrik_extracts|first
+    when: geofabrik_extracts and metro_extracts
+    sudo: no
+
+  - name: append the rest of the geofabrik extracts to the database
+    command: osm2pgsql  --append --slim --cache 100 --cache-strategy sparse --host localhost --database {{ db_name }} --user {{ db_user }} {{ geofabrik_tmp_dir }}/{{ item }}.osm.pbf
+    when: geofabrik_extracts[1:]
+    with_items: geofabrik_extracts[1:] if geofabrik_extracts else []
     sudo: no

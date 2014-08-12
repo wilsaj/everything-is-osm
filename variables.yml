@@ -4,7 +4,16 @@ db_password: "osm"
 db_name: "osm"
 
 # list of metro areas to download from https://mapzen.com/metro-extracts/
-# should be the filename
+# the extract downloaded from the url:
+#   https://s3.amazonaws.com/metro-extracts.mapzen.com/<metro_extract>.osm.pbf
 metro_extracts:
   - "austin"
   - "portland"
+
+
+# list of extracts to download from http://download.geofabrik.de/
+# the extract name can include subregions and will be downloaded from:
+#   http://download.geofabrik.de/<geofabrik_extract>-latest.osm.pbf
+geofabrik_extracts:
+  - "north-america/us/texas"
+  #- "north-america/us/rhode-island"
