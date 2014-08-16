@@ -43,7 +43,6 @@
 
   - name: make osm dir
     file: path={{ osm_dir}} recurse=yes state=directory owner={{ ansible_ssh_user }}
-    when: metro_extracts
 
   - name: make metro extract dir
     file: path={{ metro_tmp_dir}} recurse=yes state=directory
