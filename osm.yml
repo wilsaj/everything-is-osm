@@ -5,7 +5,6 @@
   vars_files:
     - variables.yml
     - _internals.yml
-  vars:
 
   handlers:
     - include: handlers.yml
