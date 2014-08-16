@@ -1,0 +1,26 @@
+---
+  - name: install imposm3 packages
+    apt: pkg={{item}}
+    with_items: imposm3_packages
+
+  - name: make build dir
+    file: name={{imposm3_build_dir}} state=directory
+
+  - name: git pull imposm3 repo
+    git: repo=git://github.com/omniscale/imposm3.git dest={{imposm3_build_dir}}/src/imposm3 version={{imposm3_version}} accept_hostkey=yes
+
+  - name: go get imposm3
+    command: go get imposm3 chdir={{imposm3_build_dir}}
+    environment:
+      GOPATH: "{{imposm3_build_dir}}"
+
+  - name: stop postgres (this avoids memory allocation issues on 512MB systems)
+    service: name=postgresql state=stopped
+
+  - name: go build imposm3
+    command: go build -o "{{imposm3_bin}}" imposm3 chdir={{imposm3_build_dir}}
+    environment:
+      GOPATH: "{{imposm3_build_dir}}"
+
+  - name: start postgres
+    service: name=postgresql state=started

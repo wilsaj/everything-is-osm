@@ -1,15 +1,10 @@
 ---
-  - name: install postgres
-    apt: pkg=postgresql-9.3 update_cache=yes cache_valid_time=604800
+  - name: update apt cache
+    apt: update_cache=yes cache_valid_time=604800
 
-  - name: install psycopg2
-    apt: pkg=python-psycopg2
-
-  - name: install postgis
-    apt: pkg=postgis
-
-  - name: install osm2pgsql
-    apt: pkg=osm2pgsql
+  - name: install postgis packages
+    apt: pkg={{item}}
+    with_items: postgis_packages
 
   - name: write postgres.conf file
     template: src=templates/postgresql.conf.j2 dest=/etc/postgresql/9.3/main/postgresql.conf
@@ -22,6 +17,9 @@
   - name: create .pgpass file
     template: src=templates/pgpass.j2 dest=~/.pgpass mode=0600
     sudo: no
+
+  - name: make sure postgres has started
+    service: name=postgresql state=started
 
   - name: create db user
     sudo_user: postgres
@@ -50,7 +48,7 @@
     sudo: no
 
   - name: download metro extracts
-    get_url: url=https://s3.amazonaws.com/metro-extracts.mapzen.com/{{ item }}.osm.pbf dest={{ metro_tmp_dir }}/{{ item }}.osm.pbf
+    get_url: url=https://s3.amazonaws.com/metro-extracts.mapzen.com/{{ item }}.osm.pbf dest={{metro_tmp_dir}}/{{item}}.osm.pbf
     with_items: metro_extracts
     when: metro_extracts
     sudo: no
@@ -66,32 +64,20 @@
     with_items: geofabrik_extracts
     sudo: no
 
-  - name: create database and import first metro extract
-    command: osm2pgsql  --create --slim --cache 100 --cache-strategy sparse --multi-geometry --host localhost --database {{ db_name }} --user {{ db_user }} {{ metro_tmp_dir}}/{{ item }}.osm.pbf
-    with_items: metro_extracts|first
+  - include: build_imposm.yml
+
+  - name: write mapping.json file
+    template: src=templates/mapping.json dest={{mapping_json}}
+
+  - name: add extracts to imposm3 cache
+    command: "{{imposm3_bin}} import -connection postgis://osm:osm@localhost/osm -mapping {{mapping_json}} -read {{metro_tmp_dir}}/{{item}}.osm.pbf -appendcache"
+    with_items: metro_extracts
     when: metro_extracts
-    sudo: no
 
-  - name: append the rest of the metro extracts to the database
-    command: osm2pgsql  --append --slim --cache 100 --cache-strategy sparse --multi-geometry --host localhost --database {{ db_name }} --user {{ db_user }} {{ metro_tmp_dir}}/{{ item }}.osm.pbf
-    with_items: metro_extracts[1:] if metro_extracts else []
-    when: metro_extracts
-    sudo: no
+  - name: add extracts to imposm3 cache
+    command: "{{imposm3_bin}} import -connection postgis://osm:osm@localhost/osm -mapping {{mapping_json}} -read {{geofabrik_tmp_dir}}/{{item}}.osm.pbf -appendcache"
+    with_items: geofabrik_extracts
+    when: geofabrik_extracts
 
-  - name: create database and import first geofabrik extract
-    command: osm2pgsql  --create --slim --cache 100 --cache-strategy sparse --host localhost --database {{ db_name }} --user {{ db_user }} {{ geofabrik_tmp_dir }}/{{ item }}.osm.pbf
-    with_items: geofabrik_extracts|first
-    when: geofabrik_extracts and not metro_extracts
-    sudo: no
-
-  - name: don't create database and append first geofabrik extract
-    command: osm2pgsql  --append --slim --cache 100 --cache-strategy sparse --host localhost --database {{ db_name }} --user {{ db_user }} {{ geofabrik_tmp_dir }}/{{ item }}.osm.pbf
-    with_items: geofabrik_extracts|first
-    when: geofabrik_extracts and metro_extracts
-    sudo: no
-
-  - name: append the rest of the geofabrik extracts to the database
-    command: osm2pgsql  --append --slim --cache 100 --cache-strategy sparse --host localhost --database {{ db_name }} --user {{ db_user }} {{ geofabrik_tmp_dir }}/{{ item }}.osm.pbf
-    when: geofabrik_extracts[1:]
-    with_items: geofabrik_extracts[1:] if geofabrik_extracts else []
-    sudo: no
+  - name: write OSM data to PostGIS
+    command: "{{imposm3_bin}} import -connection postgis://osm:osm@localhost/osm -mapping {{mapping_json}} -write"

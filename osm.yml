@@ -4,10 +4,8 @@
 
   vars_files:
     - variables.yml
+    - _internals.yml
   vars:
-    osm_dir: /var/osm
-    geofabrik_tmp_dir: "{{ osm_dir }}/geofabrik"
-    metro_tmp_dir: "{{ osm_dir }}/metro"
 
   handlers:
     - include: handlers.yml

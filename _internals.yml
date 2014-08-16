@@ -1,0 +1,21 @@
+---
+osm_dir: /var/osm
+imposm3_build_dir: "{{osm_dir}}/imposm3"
+imposm3_bin: "{{imposm3_build_dir}}/imposm3"
+imposm3_packages:
+  - golang
+  - git
+  - libgeos++-dev
+  - libleveldb-dev
+  - libprotobuf-dev
+  - libsqlite3-dev
+  - mercurial
+imposm3_version: 3b73f91a0d144524b6b9bac7011ffc9e90276e58
+postgis_packages:
+  - postgresql-9.3
+  - postgresql-9.3-postgis-2.1
+  - python-psycopg2
+
+geofabrik_tmp_dir: "{{osm_dir}}/geofabrik"
+metro_tmp_dir: "{{osm_dir}}/metro"
+mapping_json: "{{osm_dir}}/mapping.json"
