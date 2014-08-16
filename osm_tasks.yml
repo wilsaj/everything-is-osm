@@ -23,44 +23,44 @@
 
   - name: create db user
     sudo_user: postgres
-    postgresql_user: name={{ db_user }}
-                     password={{ db_password }}
+    postgresql_user: name={{db_user}}
+                     password={{db_password}}
                      encrypted=false
 
   - name: create osm database
     sudo_user: postgres
-    postgresql_db: name={{ db_name }} owner={{ db_user }}
+    postgresql_db: name={{db_name}} owner={{db_user}}
 
   - name: enable postgis on osm database
     sudo_user: postgres
-    command: psql -d {{ db_name }} -c 'CREATE EXTENSION IF NOT EXISTS postgis;'
+    command: psql -d {{db_name}} -c 'CREATE EXTENSION IF NOT EXISTS postgis;'
 
   - name: enable hstore on osm database
     sudo_user: postgres
-    command: psql -d {{ db_name }} -c 'CREATE EXTENSION IF NOT EXISTS hstore;'
+    command: psql -d {{db_name}} -c 'CREATE EXTENSION IF NOT EXISTS hstore;'
 
   - name: make osm dir
-    file: path={{ osm_dir}} recurse=yes state=directory owner={{ ansible_ssh_user }}
+    file: path={{osm_dir}} recurse=yes state=directory owner={{ansible_ssh_user}}
 
   - name: make metro extract dir
-    file: path={{ metro_tmp_dir}} recurse=yes state=directory
+    file: path={{metro_tmp_dir}} recurse=yes state=directory
     when: metro_extracts
     sudo: no
 
   - name: download metro extracts
-    get_url: url=https://s3.amazonaws.com/metro-extracts.mapzen.com/{{ item }}.osm.pbf dest={{metro_tmp_dir}}/{{item}}.osm.pbf
+    get_url: url=https://s3.amazonaws.com/metro-extracts.mapzen.com/{{item}}.osm.pbf dest={{metro_tmp_dir}}/{{item}}.osm.pbf
     with_items: metro_extracts
     when: metro_extracts
     sudo: no
 
   - name: make geofabrik extract dirs
-    file: path={{ geofabrik_tmp_dir}}/{{ item | dirname }} recurse=yes state=directory
+    file: path={{geofabrik_tmp_dir}}/{{item | dirname}} recurse=yes state=directory
     with_items: geofabrik_extracts
     when: geofabrik_extracts
     sudo: no
 
   - name: download geofabrik extracts
-    get_url: url=http://download.geofabrik.de/{{ item }}-latest.osm.pbf dest={{ geofabrik_tmp_dir}}/{{ item }}.osm.pbf
+    get_url: url=http://download.geofabrik.de/{{item}}-latest.osm.pbf dest={{geofabrik_tmp_dir}}/{{item}}.osm.pbf
     with_items: geofabrik_extracts
     sudo: no
 
