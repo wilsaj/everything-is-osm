@@ -14,13 +14,7 @@
     environment:
       GOPATH: "{{imposm3_build_dir}}"
 
-  - name: stop postgres (this avoids memory allocation issues on 512MB systems)
-    service: name=postgresql state=stopped
-
   - name: go build imposm3
     command: go build -o "{{imposm3_bin}}" imposm3 chdir={{imposm3_build_dir}}
     environment:
       GOPATH: "{{imposm3_build_dir}}"
-
-  - name: start postgres
-    service: name=postgresql state=started

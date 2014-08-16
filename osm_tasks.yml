@@ -2,6 +2,8 @@
   - name: update apt cache
     apt: update_cache=yes cache_valid_time=604800
 
+  - include: build_imposm.yml
+
   - name: install postgis packages
     apt: pkg={{item}}
     with_items: postgis_packages
@@ -63,8 +65,6 @@
     get_url: url=http://download.geofabrik.de/{{item}}-latest.osm.pbf dest={{geofabrik_tmp_dir}}/{{item}}.osm.pbf
     with_items: geofabrik_extracts
     sudo: no
-
-  - include: build_imposm.yml
 
   - name: write mapping.json file
     template: src=templates/mapping.json dest={{mapping_json}}
