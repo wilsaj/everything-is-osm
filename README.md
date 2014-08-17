@@ -25,7 +25,7 @@ First, install recent versions of these:
 ### Choose your extracts
 
 The [metro extracts](https://mapzen.com/metro-extracts/) are focused on major
-metropolitan areas, and the [geofabrik](http://download.geofabrik.de/) extracts
+metropolitan areas, and the [geofabrik extracts](http://download.geofabrik.de/)
 contain data that span countries and regions (continents and groups of related
 countries).  Larger volumes of data will take longer to and may require more
 virtual machine memory to successfully import (see the section on
