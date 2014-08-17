@@ -2,7 +2,12 @@
   - name: update apt cache
     apt: update_cache=yes cache_valid_time=604800
 
+  - name: check if imposm3 has already been built
+    stat: path={{imposm3_bin}}
+    register: imposm3
+
   - include: build_imposm.yml
+    when: not imposm3.stat.exists
 
   - name: install postgis packages
     apt: pkg={{item}}
