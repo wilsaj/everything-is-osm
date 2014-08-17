@@ -1,10 +1,17 @@
 Everything is OSM
 =================
 
-A super easy way to setup PostGIS with OpenStreetMap data extracts from
-[mapzen](https://mapzen.com/metro-extracts/) and
-[geofabrik](http://download.geofabrik.de/). More free time for your OSM
-community!
+Simple automated setup of PostGIS + OpenStreetMap data. More free time for your
+OSM community!
+
+The aim of this project is to provide an easy way to get started working with
+OpenStreetMap data and/or PostGIS. It works on Windows, Linux, and Mac OS X.
+
+It uses popular [development](http://vagrantup.com/) and [system
+configuration](http://docs.ansible.com/) tools to build and configure a [virtual
+machine](https://www.virtualbox.org/), then download and import OpenStreetMap
+data extracts from [mapzen](https://mapzen.com/metro-extracts/) and
+[geofabrik](http://download.geofabrik.de/).
 
 
 First
@@ -25,8 +32,8 @@ extracts](https://mapzen.com/metro-extracts/) focus metropolitan areas, and the
 [geofabrik](http://download.geofabrik.de/) extracts are larger country and
 regional level areas. Large extracts of regions or multiple large countries
 involve a lot of data so they will take longer to import and may require
-more virtual machine memory to successfully import (see the [Customize it]
-section below for how to increase the amount of RAM).
+more virtual machine memory to successfully import (see the [Customize
+it](#customize-it) section below for how to increase the amount of RAM).
 
 
 Edit `variables.yml` so it contains the extracts that you want to include. For
