@@ -2,6 +2,7 @@
 osm_dir: /var/osm
 imposm3_build_dir: "{{osm_dir}}/imposm3"
 imposm3_bin: "{{imposm3_build_dir}}/imposm3"
+imposm3_cache_dir: "{{osm_dir}}/cache"
 imposm3_packages:
   - golang
   - git
