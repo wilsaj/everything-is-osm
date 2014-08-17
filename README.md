@@ -24,13 +24,13 @@ First, install recent versions of these:
 
 ### Choose your extracts
 
-Choose which areas you want to extract. The [metro
-extracts](https://mapzen.com/metro-extracts/) are focused on major metropolitan
-areas, and the [geofabrik](http://download.geofabrik.de/) extracts contain data
-that span countries and regions (continents and groups of related countries).
-Larger volumes of data will take longer to and may require more virtual machine
-memory to successfully import (see the section on [customizing](#customizing)
-for instructions on how to increase the amount of RAM).
+The [metro extracts](https://mapzen.com/metro-extracts/) are focused on major
+metropolitan areas, and the [geofabrik](http://download.geofabrik.de/) extracts
+contain data that span countries and regions (continents and groups of related
+countries).  Larger volumes of data will take longer to and may require more
+virtual machine memory to successfully import (see the section on
+[customizing](#customizing) for instructions on how to increase the amount of
+RAM).
 
 
 Edit `variables.yml` so it contains the extracts that you want to include. For
