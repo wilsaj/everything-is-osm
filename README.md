@@ -1,9 +1,10 @@
 Everything is OSM
 =================
 
-A super easy way to setup PostGIS with OpenStreetMap
-[metro extracts](https://mapzen.com/metro-extracts/). More free time for your
-OSM community!
+A super easy way to setup PostGIS with OpenStreetMap data extracts from
+[mapzen](https://mapzen.com/metro-extracts/) and
+[geofabrik](http://download.geofabrik.de/). More free time for your OSM
+community!
 
 
 First
