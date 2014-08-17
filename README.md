@@ -20,9 +20,17 @@ Install recent versions of these:
 Then
 ----
 
-Choose which metro areas you want to use. Edit `variables.yml` so that the last
-line contains a list of the [metro extracts](https://mapzen.com/metro-extracts/)
-that you want to include. For example:
+Choose which areas you want to extract. The [metro
+extracts](https://mapzen.com/metro-extracts/) focus metropolitan areas, and the
+[geofabrik](http://download.geofabrik.de/) extracts are larger country and
+regional level areas. Large extracts of regions or multiple large countries
+involve a lot of data so they will take longer to import and may require
+more virtual machine memory to successfully import (see the [Customize it]
+section below for how to increase the amount of RAM).
+
+
+Edit `variables.yml` so it contains the extracts that you want to include. For
+example:
 
     metro_extracts:
       - "austin"
