@@ -1,8 +1,9 @@
 ---
+db_name: "osm"
 db_user: "osm"
 db_password: "osm"
-db_name: "osm"
 db_port: 5432
+db_schema: "public"
 
 # amount of dedicated RAM, in MB, that will be devoted to the virtual machine
 #vm_ram: 512

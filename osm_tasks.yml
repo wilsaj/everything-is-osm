@@ -85,4 +85,4 @@
     when: geofabrik_extracts
 
   - name: write OSM data to PostGIS
-    command: "{{imposm3_bin}} import -connection postgis://osm:osm@localhost/osm -mapping {{mapping_json}} -write -cachedir={{imposm3_cache_dir}}"
+    command: "{{imposm3_bin}} import -connection postgis://osm:osm@localhost/osm -mapping {{mapping_json}} -write -cachedir={{imposm3_cache_dir}} -dbschema-import={{db_schema}}"
