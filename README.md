@@ -26,11 +26,10 @@ First, install recent versions of these:
 
 The [metro extracts](https://mapzen.com/metro-extracts/) are focused on major
 metropolitan areas, and the [geofabrik extracts](http://download.geofabrik.de/)
-contain data that span countries and regions (continents and groups of related
-countries).  Larger volumes of data will take longer to and may require more
-virtual machine memory to successfully import (see the section on
-[customizing](#customizing) for instructions on how to increase the amount of
-RAM).
+contain data that span countries and international regions. Larger volumes of
+data will take longer may require more virtual machine memory to successfully
+import; see the section on [customizing](#customizing) for instructions on how
+to increase the amount of RAM.
 
 
 Edit `variables.yml` so it contains the extracts that you want to include. For
@@ -51,15 +50,15 @@ or:
 
 ### Get the party started
 
-From the command line, just run `vagrant up` and give it a few minutes to
-do it does its thing. When it finishes running, a PostGIS database will be ready
-to go and loaded up with OSM data! 
+From the command line, just run `vagrant up` and give it a few minutes to do it
+does its thing. When it finishes running, a PostGIS database will be ready to go
+and loaded up with OSM data!
 
 
 ### Everything is OSM
 
-Connect to the database on port 5432. For example, you can use this string to
-connect to the PostGIS database from Tilemill:
+The PostGIS database will be available on localhost. For example, to connect to
+the database from Tilemill:
 
     dbname=osm host=localhost port=5432 user=osm password=osm
 
