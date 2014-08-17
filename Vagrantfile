@@ -1,5 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
+require 'yaml'
 
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
@@ -8,6 +9,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # All Vagrant configuration is done here. The most common configuration
   # options are documented and commented below. For a complete reference,
   # please see the online documentation at vagrantup.com.
+
+  variables = YAML.load_file('variables.yml')
 
   if ['foo'].pack('p').size == 8
     bits = "64"
@@ -59,10 +62,23 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #   # Use VBoxManage to customize the VM. For example to change memory:
   #   vb.customize ["modifyvm", :id, "--memory", "1024"]
   # end
-  #
+
+  config.vm.provider :virtualbox do |vb|
+    memory = variables.fetch('vm_ram', false)
+    if memory
+        vb.memory = memory
+    end
+
+    cpus = variables.fetch('vm_cpus', false)
+    if cpus
+        vb.cpus = cpus
+    end
+  end
+
+
   # View the documentation for the provider you're using for more
   # information on available options.
-  
+
   config.vm.provision "shell", path: "bootstrap_ansible.sh"
 
   # Enable provisioning with Puppet stand alone.  Puppet manifests

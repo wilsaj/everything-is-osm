@@ -3,6 +3,12 @@ db_user: "osm"
 db_password: "osm"
 db_name: "osm"
 
+# amount of dedicated RAM, in MB, that will be devoted to the virtual machine
+#vm_ram: 512
+
+# number of dedicated CPUs that will be devoted to the virtual machine
+#vm_cpus: 1
+
 # list of metro areas to download from https://mapzen.com/metro-extracts/
 # the extract downloaded from the url:
 #   https://s3.amazonaws.com/metro-extracts.mapzen.com/<metro_extract>.osm.pbf
