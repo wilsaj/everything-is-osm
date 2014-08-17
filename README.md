@@ -1,13 +1,11 @@
 Everything is OSM
 =================
 
-Simple automated setup of PostGIS + OpenStreetMap data. More free time for your
-OSM community!
+Get started with PostGIS + OpenStreetMap data in minutes. Works on Windows,
+Linux, and Mac. [More free time for your OSM
+community!](https://www.youtube.com/watch?v=StTqXEQ2l-Y)
 
-The aim of this project is to provide an easy way to get started working with
-OpenStreetMap data and/or PostGIS. It works on Windows, Linux, and Mac OS X.
-
-It uses popular [development](http://vagrantup.com/) and [system
+This project uses popular [development](http://vagrantup.com/) and [system
 configuration](http://docs.ansible.com/) tools to build and configure a [virtual
 machine](https://www.virtualbox.org/), then download and import OpenStreetMap
 data extracts from [mapzen](https://mapzen.com/metro-extracts/) and
