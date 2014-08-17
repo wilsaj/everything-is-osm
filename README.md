@@ -3,7 +3,7 @@ Everything is OSM
 
 Get started with PostGIS + OpenStreetMap data in minutes. Works on Windows,
 Linux, and Mac. [More free time for your OSM
-community!](https://www.youtube.com/watch?v=StTqXEQ2l-Y)
+community!](https://www.youtube.com/watch?v=StTqXEQ2l-Y&t=5s)
 
 This project uses popular [development](http://vagrantup.com/) and [system
 configuration](http://docs.ansible.com/) tools to build and configure a [virtual
