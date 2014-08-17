@@ -14,9 +14,10 @@ cat /root/.ssh/id_rsa.pub >> /home/vagrant/.ssh/authorized_keys
 ssh-keyscan localhost > /root/.ssh/known_hosts
 
 
-# Ansible needs to have host file not be executable, so copy ansible hosts file
-# to /tmp so we can change permissions if VM host is Windows (permissions are
-# editable or even a thing that exists on Windows filesystems).
+# Ansible requires that an inventory file is not executable, so copy ansible
+# hosts file to /tmp and change permissions. This is necessary on Windows due to
+# the way filesystems are implemented: there isn't a way to change per-file
+# permissions on files in the shared /vagrant dir.
 cp /vagrant/vagrant_ansible_hosts /tmp/vagrant_ansible_hosts
 chmod -x /tmp/vagrant_ansible_hosts
 
