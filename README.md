@@ -53,16 +53,7 @@ To stop the server, run `vagrant halt`.
 Customize it
 ------------
 
-The default database name, user, and password are "osm", but you can change them
-by editing `variables.yml`.
-
-
-If you want to connect to a different port than localhost:5432, just change the
-value for the host parameter in the `Vagrantfile`. For example, to connect to
-port 15342 instead, change this line:
-
-    config.vm.network :forwarded_port, guest: 5432, host: 5432
-
-to:
-
-    config.vm.network :forwarded_port, guest: 5432, host: 15432
+The file `variables.yml` contains the database name, user and password (all
+default to "osm"), as well as port number (default 5432), and settings for
+virtual machine memory and number of cpus. Feel free to open up `variables.yml`
+and change any of these values.
