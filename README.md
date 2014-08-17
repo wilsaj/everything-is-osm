@@ -25,7 +25,7 @@ extracts](https://mapzen.com/metro-extracts/) focus metropolitan areas, and the
 [geofabrik](http://download.geofabrik.de/) extracts are larger country and
 regional level areas. Large extracts of regions or multiple large countries
 involve a lot of data so they will take longer to import and may require
-more virtual machine memory to successfully import (see the [Customize it]
+more virtual machine memory to successfully import (see the [Customize it](#customize-it)
 section below for how to increase the amount of RAM).
 
 
