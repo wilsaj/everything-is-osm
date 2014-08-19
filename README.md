@@ -83,9 +83,8 @@ Or from QGIS:
 
 The file `variables.yml` contains the database name, user and password (all
 default to "osm"), as well as port number (default 5432), and settings for
-virtual machine memory and number of cpus. Feel free to open up `variables.yml`
-and change any of these values. You will need to reload the virtual machine
-for settings to take effect.
+virtual machine memory and number of cpus. Feel free to change any of these
+values. Modified values will take effect when the virtual machine is reloaded.
 
 
 ### Reloading
