@@ -22,4 +22,4 @@ cp /vagrant/vagrant_ansible_hosts /tmp/vagrant_ansible_hosts
 chmod -x /tmp/vagrant_ansible_hosts
 
 # run the ansible playbook to start making things osm
-ansible-playbook -i /tmp/vagrant_ansible_hosts -u vagrant /vagrant/osm.yml
+ansible-playbook -i /tmp/vagrant_ansible_hosts -u vagrant /vagrant/everything-is-osm.yml
