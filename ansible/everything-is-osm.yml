@@ -3,7 +3,7 @@
   sudo: yes
 
   vars_files:
-    - variables.yml
+    - ../variables.yml
     - _internals.yml
 
   handlers:

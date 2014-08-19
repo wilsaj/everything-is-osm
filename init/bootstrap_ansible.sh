@@ -27,4 +27,4 @@ chmod -x /tmp/vagrant_ansible_hosts
 export PYTHONUNBUFFERED=1
 
 # run the ansible playbook to start making things osm
-ansible-playbook -i /tmp/vagrant_ansible_hosts -u vagrant /vagrant/everything-is-osm.yml
+ansible-playbook -i /tmp/vagrant_ansible_hosts -u vagrant /vagrant/ansible/everything-is-osm.yml
