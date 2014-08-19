@@ -66,6 +66,10 @@ the database from Tilemill:
 ![Tilemill Screenshot](tilemill-screenshot.png)
 
 
+Or from QGIS:
+
+![QGIS Screenshot](qgis-screenshot.png)
+
 
 ## Additional usage
 
