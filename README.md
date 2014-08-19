@@ -27,7 +27,7 @@ First, install recent versions of these:
 The [metro extracts](https://mapzen.com/metro-extracts/) are focused on major
 metropolitan areas, and the [geofabrik extracts](http://download.geofabrik.de/)
 contain data that span countries and international regions. Larger volumes of
-data will take longer may require more virtual machine memory to successfully
+data will take longer and may require more virtual machine memory to successfully
 import; see the section on [customizing](#customizing) for instructions on how
 to increase the amount of RAM.
 
