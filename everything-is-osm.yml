@@ -7,7 +7,8 @@
     - _internals.yml
 
   handlers:
-    - include: handlers.yml
+    - name: restart postgresql
+      service: name=postgresql state=restarted
 
   tasks:
     - name: update apt cache
