@@ -21,5 +21,10 @@ ssh-keyscan localhost > /root/.ssh/known_hosts
 cp /vagrant/init/vagrant_ansible_hosts /tmp/vagrant_ansible_hosts
 chmod -x /tmp/vagrant_ansible_hosts
 
+
+# set PYTHONUNBUFFERED env variable so output from the ansible script is passed
+# along in real time instead of all flushed at the very end
+export PYTHONUNBUFFERED=1
+
 # run the ansible playbook to start making things osm
 ansible-playbook -i /tmp/vagrant_ansible_hosts -u vagrant /vagrant/everything-is-osm.yml
