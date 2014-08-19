@@ -63,12 +63,12 @@ the database from Tilemill:
     dbname=osm host=localhost port=5432 user=osm password=osm
 
 
-![Tilemill Screenshot](tilemill-screenshot.png)
+![Tilemill Screenshot](doc/tilemill-screenshot.png)
 
 
 Or from QGIS:
 
-![QGIS Screenshot](qgis-screenshot.png)
+![QGIS Screenshot](doc/qgis-screenshot.png)
 
 
 ## Additional usage
