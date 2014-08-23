@@ -11,6 +11,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # please see the online documentation at vagrantup.com.
 
   variables = YAML.load_file('variables.yml')
+  internals = YAML.load_file('ansible/_internals.yml')
 
   if ['foo'].pack('p').size == 8
     bits = "64"
@@ -64,6 +65,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #   vb.customize ["modifyvm", :id, "--memory", "1024"]
   # end
 
+  extra_storage = variables.fetch('extra_storage', false)
+
   config.vm.provider :virtualbox do |vb|
     memory = variables.fetch('vm_ram', false)
     if memory
@@ -74,13 +77,23 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     if cpus
         vb.cpus = cpus
     end
+
+    if extra_storage
+        file_to_disk = variables.fetch('extra_storage_file', './tmp/vm-extra-storage.vdi')
+
+        unless File.exist?(file_to_disk)
+          vb.customize ['createhd', '--filename', file_to_disk, '--size', variables.fetch('extra_storage_gb') * 1024]
+        end
+
+        vb.customize ['storageattach', :id, '--storagectl', 'SATAController', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', file_to_disk]
+    end
   end
 
 
   # View the documentation for the provider you're using for more
   # information on available options.
 
-  config.vm.provision "shell", path: "init/bootstrap_ansible.sh", run: "always"
+  config.vm.provision "shell", path: "init/bootstrap_ansible.sh", args: [extra_storage ? "1" : "0", internals.fetch('osm_dir')], run: "always"
 
   # Enable provisioning with Puppet stand alone.  Puppet manifests
   # are contained in a directory path relative to this Vagrantfile.

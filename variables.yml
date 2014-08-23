@@ -6,22 +6,35 @@ db_port: 5432
 db_schema: "public"
 
 # amount of dedicated RAM, in MB, that will be devoted to the virtual machine
-#vm_ram: 512
+vm_ram: 4096
 
 # number of dedicated CPUs that will be devoted to the virtual machine
-#vm_cpus: 1
+vm_cpus: 2
 
 # list of metro areas to download from https://mapzen.com/metro-extracts/
 # the extract downloaded from the url:
 #   https://s3.amazonaws.com/metro-extracts.mapzen.com/<metro_extract>.osm.pbf
 metro_extracts:
-  - "austin"
-  - "portland"
+  #- "austin"
+  #- "portland"
 
 
 # list of extracts to download from http://download.geofabrik.de/
 # the extract name can include subregions and will be downloaded from:
 #   http://download.geofabrik.de/<geofabrik_extract>-latest.osm.pbf
 geofabrik_extracts:
-  - "north-america/us/texas"
+  - "north-america"
   #- "north-america/us/rhode-island"
+
+
+# Set this to yes if you are using a lot of data and/or running out of disk
+# space. It will create a virtual disk that will provide extra storage space
+# for the virtual machine.
+extra_storage: true
+
+# The location for the virtual disk, if used.
+extra_storage_file: './tmp/vm-extra-storage.vdi'
+
+# Maximum size in GB that the extra storage can be. The file will start small
+# and only grow as it is used.
+extra_storage_gb: 100

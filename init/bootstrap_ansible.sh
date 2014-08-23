@@ -3,6 +3,20 @@
 # small script that bootstraps execution of ansible playbooks, for the benefit
 # of windows users
 
+EXTRA_STORAGE=$1
+OSM_DIR=$2
+
+if [ ${EXTRA_STORAGE} = "1" ]; then
+  if [ ! -b /dev/sdb1 ]; then
+    parted /dev/sdb mklabel msdos
+    parted /dev/sdb mkpart primary 512 100%
+    sudo mkfs.ext4 /dev/sdb1
+    mkdir -p ${OSM_DIR}
+    echo "/dev/sdb1	${OSM_DIR}	ext4	defaults	0 0" >> /etc/fstab
+    mount ${OSM_DIR}
+  fi
+fi
+
 # install ansible
 apt-get -y install ansible
 
