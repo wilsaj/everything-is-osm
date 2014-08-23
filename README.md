@@ -27,7 +27,7 @@ First, install recent versions of these:
 Decide what part of the world you want to import data for. The [metro
 extracts](https://mapzen.com/metro-extracts/) cover major metropolitan areas,
 and the [geofabrik extracts](http://download.geofabrik.de/) cover countries and
-international regions. 
+international regions.
 
 
 **Note**: Larger volumes of data will take more time and might require more
@@ -76,24 +76,47 @@ Or from QGIS:
 ![QGIS Screenshot](doc/qgis-screenshot.png)
 
 
-## Additional usage
+## Additional Usage
 
 
 ### Customizing
 
 The file `variables.yml` contains the database name, user and password (all
 default to "osm"), as well as port number (default 5432), and settings for
-virtual machine memory and number of cpus. Feel free to change any of these
-values. Modified values will take effect when the virtual machine is reloaded.
+virtual machine memory and number of cpus. Feel free to open up `variables.yml`
+and change any of these values. You will need to [reload](#advanced-vagrant) the
+virtual machine for settings to take effect.
 
 
-### Reloading
+### Vagrant Basics
 
-To reload the virtual machine, run `vagrant reload`.
+This project uses [vagrant](http://vagrantup.com/) to manage the virtual
+machine. Vagrant provides a pretty simple interface. These are the most relevant
+commands:
+
+`vagrant up` starts up the virtual machine and runs through the configuration
+and import scripts.
+
+`vagrant halt` stops the virtual machine. This releases any RAM you've dedicated
+to the virtual machine. After this, the PostGIS database will not be available
+until `vagrant up` is run again.
 
 
-### Stopping
+### Advanced Vagrant
 
-When you need to stop the virtual machine, run `vagrant halt`.
+`vagrant reload` restarts the virtual machine. It is equivalent to `vagrant
+halt` then `vagrant up`.
 
+`vagrant up --no-provision` will skip the import phase. This will save time if
+data extracts have previously been imported and the virtual machine was stopped
+with `vagrant halt`.
 
+`vagrant destroy` will completely wipe out the virtual machine. All the files
+and data on the virtual machine will be removed, including anything in the
+database.  It is useful if you want to reclaim disk space or just start over
+from scratch.
+
+`vagrant provision` will just run through the setup and import phase without
+stopping the virtual machine. This can be slightly faster than a `vagrant
+reload` if add new extracts have been added to `variables.yml` and those need to
+be imported.
