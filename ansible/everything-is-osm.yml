@@ -40,11 +40,34 @@
     - name: make sure postgres has started
       service: name=postgresql state=started
 
+    - name: make osm dir
+      file: path={{osm_dir}} recurse=yes state=directory owner={{ansible_ssh_user}}
+
     - name: create db user
       sudo_user: postgres
       postgresql_user: name={{db_user}}
                        password={{db_password}}
                        encrypted=false
+
+    - name: make tablespace dir
+      file: path={{extra_storage_tablespace_dir}} recurse=yes state=directory owner=postgres group=postgres
+      when: extra_storage
+
+    - name: check if tablespace exists
+      sudo_user: postgres
+      command: psql -c "select spcname from pg_tablespace where spcname ='{{extra_storage_tablespace}}';"
+      register: tablespace
+      when: extra_storage
+
+    - name: create tablespace
+      sudo_user: postgres
+      command: psql -c "CREATE TABLESPACE {{extra_storage_tablespace}} OWNER {{db_user}} LOCATION '{{extra_storage_tablespace_dir}}';"
+      when: extra_storage and tablespace.stdout.find('0 rows') != -1
+
+    - name: set tablespace
+      sudo_user: postgres
+      command: psql -c "SET default_tablespace = {{extra_storage_tablespace}};"
+      when: extra_storage
 
     - name: create osm database
       sudo_user: postgres
@@ -57,9 +80,6 @@
     - name: enable hstore on osm database
       sudo_user: postgres
       command: psql -d {{db_name}} -c 'CREATE EXTENSION IF NOT EXISTS hstore;'
-
-    - name: make osm dir
-      file: path={{osm_dir}} recurse=yes state=directory owner={{ansible_ssh_user}}
 
     - name: make metro extract dir
       file: path={{metro_tmp_dir}} recurse=yes state=directory
