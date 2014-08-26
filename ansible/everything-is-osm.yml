@@ -64,14 +64,21 @@
       command: psql -c "CREATE TABLESPACE {{extra_storage_tablespace}} OWNER {{db_user}} LOCATION '{{extra_storage_tablespace_dir}}';"
       when: extra_storage and tablespace.stdout.find('0 rows') != -1
 
-    - name: set tablespace
+    - name: check if database exists
       sudo_user: postgres
-      command: psql -c "SET default_tablespace = {{extra_storage_tablespace}};"
+      command: psql -c "select 1 from pg_database where datname ='{{db_name}}';"
+      register: database_exists
       when: extra_storage
 
-    - name: create osm database
+    - name: create osm database with tablespace
+      sudo_user: postgres
+      command: psql -c "CREATE database {{db_name}} OWNER {{db_user}} TABLESPACE {{extra_storage_tablespace}}"
+      when: extra_storage and database_exists.stdout.find('0 rows') != -1
+
+    - name: create osm database without tablespace
       sudo_user: postgres
       postgresql_db: name={{db_name}} owner={{db_user}}
+      when: not extra_storage
 
     - name: enable postgis on osm database
       sudo_user: postgres
