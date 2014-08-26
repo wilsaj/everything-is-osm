@@ -30,7 +30,7 @@ geofabrik_extracts:
 # Set this to yes if you are using a lot of data and/or running out of disk
 # space. It will create a virtual disk that will provide extra storage space
 # for the virtual machine.
-extra_storage: true
+extra_storage: no
 
 # The location for the virtual disk, if used.
 extra_storage_file: './tmp/vm-extra-storage.vdi'
