@@ -114,12 +114,12 @@
     - name: write mapping.json file
       template: src=templates/mapping.json dest={{mapping_json}}
 
-    - name: add extracts to imposm3 cache
+    - name: add metro extracts to imposm3 cache
       command: "{{imposm3_bin}} import -connection postgis://osm:osm@localhost/osm -mapping {{mapping_json}} -read {{metro_tmp_dir}}/{{item}}.osm.pbf -appendcache -cachedir={{imposm3_cache_dir}}"
       with_items: metro_extracts
       when: metro_extracts
 
-    - name: add extracts to imposm3 cache
+    - name: add geofabrik extracts to imposm3 cache
       command: "{{imposm3_bin}} import -connection postgis://osm:osm@localhost/osm -mapping {{mapping_json}} -read {{geofabrik_tmp_dir}}/{{item}}.osm.pbf -appendcache -cachedir={{imposm3_cache_dir}}"
       with_items: geofabrik_extracts
       when: geofabrik_extracts
