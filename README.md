@@ -118,5 +118,5 @@ from scratch.
 
 `vagrant provision` will just run through the setup and import phase without
 stopping the virtual machine. This can be slightly faster than a `vagrant
-reload` if add new extracts have been added to `variables.yml` and those need to
+reload` if new extracts have been added to `variables.yml` and those need to
 be imported.
