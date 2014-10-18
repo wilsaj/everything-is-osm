@@ -1,6 +1,6 @@
 FROM ubuntu:14.04
 
-ENV IMPOSM_VERSION 3b73f91a0d144524b6b9bac7011ffc9e90276e58
+ENV IMPOSM_VERSION 32623ccce097584be79ec8617dfae42d595ac2b8
 
 # Build imposm3 binary and clean up afterwards
 RUN apt-get update \
