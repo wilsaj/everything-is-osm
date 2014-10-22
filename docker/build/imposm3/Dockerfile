@@ -22,3 +22,12 @@ RUN apt-get update \
     && apt-get purge -y --auto-remove golang \
     && apt-get purge -y --auto-remove git \
     && apt-get purge -y --auto-remove mercurial
+
+RUN apt-get update \
+    && apt-get install -y curl
+
+VOLUME /everything-is-osm
+
+COPY import.sh /import.sh
+COPY mapping.json /everything-is-osm/mapping.json
+RUN mkdir -p /everything-is-osm/metro
