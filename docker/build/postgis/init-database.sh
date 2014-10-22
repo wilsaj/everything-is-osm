@@ -19,8 +19,11 @@ gosu postgres pg_ctl -D /var/lib/postgresql/data start
 # give it a moment to be able to accept connections
 sleep 0.1
 
-CREATE_POSTGIS="CREATE EXTENSION postgis"
+CREATE_POSTGIS="CREATE EXTENSION IF NOT EXISTS postgis"
 gosu postgres /usr/lib/postgresql/9.3/bin/psql -c "$CREATE_POSTGIS" $DB_NAME
+
+CREATE_HSTORE="CREATE EXTENSION IF NOT EXISTS hstore"
+gosu postgres /usr/lib/postgresql/9.3/bin/psql -c "$CREATE_HSTORE" $DB_NAME
 
 # stop server
 gosu postgres pg_ctl -D /var/lib/postgresql/data stop
