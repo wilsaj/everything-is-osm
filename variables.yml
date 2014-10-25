@@ -15,8 +15,8 @@ vm_cpus: 2
 # the extract downloaded from the url:
 #   https://s3.amazonaws.com/metro-extracts.mapzen.com/<metro_extract>.osm.pbf
 metro_extracts:
-  - "austin"
-  #- "portland"
+  - "austin_texas"
+  #- "portland_oregon"
 
 
 # list of extracts to download from http://download.geofabrik.de/
