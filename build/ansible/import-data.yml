@@ -1,0 +1,40 @@
+---
+  - name: make metro extract dir
+    file: path={{metro_tmp_dir}} recurse=yes state=directory
+    when: metro_extracts
+    sudo: no
+
+  - name: download metro extracts
+    get_url: url=https://s3.amazonaws.com/metro-extracts.mapzen.com/{{item}}.osm.pbf dest={{metro_tmp_dir}}/{{item}}.osm.pbf
+    with_items: metro_extracts
+    when: metro_extracts
+    sudo: no
+
+  - name: make geofabrik extract dirs
+    file: path={{geofabrik_tmp_dir}}/{{item | dirname}} recurse=yes state=directory
+    with_items: geofabrik_extracts
+    when: geofabrik_extracts
+    sudo: no
+
+  - name: download geofabrik extracts
+    get_url: url=http://download.geofabrik.de/{{item}}-latest.osm.pbf dest={{geofabrik_tmp_dir}}/{{item}}.osm.pbf
+    with_items: geofabrik_extracts
+    when: geofabrik_extracts
+    sudo: no
+
+  - name: write mapping.json file
+    template: src=templates/mapping.json dest={{mapping_json}}
+
+  - name: add metro extracts to imposm3 cache
+    command: "{{imposm3_bin}} import -connection postgis://osm:osm@localhost/osm -mapping {{mapping_json}} -read {{metro_tmp_dir}}/{{item}}.osm.pbf -appendcache -cachedir={{imposm3_cache_dir}}"
+    with_items: metro_extracts
+    when: metro_extracts
+
+  - name: add geofabrik extracts to imposm3 cache
+    command: "{{imposm3_bin}} import -connection postgis://osm:osm@localhost/osm -mapping {{mapping_json}} -read {{geofabrik_tmp_dir}}/{{item}}.osm.pbf -appendcache -cachedir={{imposm3_cache_dir}}"
+    with_items: geofabrik_extracts
+    when: geofabrik_extracts
+
+  - name: write OSM data to PostGIS
+    command: "{{imposm3_bin}} import -connection postgis://osm:osm@localhost/osm -mapping {{mapping_json}} -write -cachedir={{imposm3_cache_dir}} -dbschema-import={{db_schema}}"
+

@@ -13,116 +13,18 @@
   tasks:
     - name: update apt cache
       apt: update_cache=yes cache_valid_time=604800
+      when: setup
 
     - name: check if imposm3 has already been built
       stat: path={{imposm3_bin}}
       register: imposm3
 
-    - include: build_imposm.yml
-      when: not imposm3.stat.exists
+    - include: build-imposm.yml
+      when: setup and not imposm3.stat.exists
 
-    - name: install postgis packages
-      apt: pkg={{item}}
-      with_items: postgis_packages
+    - include: setup-database.yml
+      when: setup
 
-    - name: write postgres.conf file
-      template: src=templates/postgresql.conf.j2 dest=/etc/postgresql/9.3/main/postgresql.conf
-      notify: restart postgresql
+    - include: import-data.yml
+      when: import
 
-    - name: write pg_hba.conf file
-      template: src=templates/pg_hba.conf.j2 dest=/etc/postgresql/9.3/main/pg_hba.conf
-      notify: restart postgresql
-
-    - name: create .pgpass file
-      template: src=templates/pgpass.j2 dest=~/.pgpass mode=0600
-      sudo: no
-
-    - name: make sure postgres has started
-      service: name=postgresql state=started
-
-    - name: make osm dir
-      file: path={{osm_dir}} recurse=yes state=directory owner={{ansible_ssh_user}}
-
-    - name: create db user
-      sudo_user: postgres
-      postgresql_user: name={{db_user}}
-                       password={{db_password}}
-                       encrypted=false
-
-    - name: make tablespace dir
-      file: path={{extra_storage_tablespace_dir}} recurse=yes state=directory owner=postgres group=postgres
-      when: extra_storage
-
-    - name: check if tablespace exists
-      sudo_user: postgres
-      command: psql -c "select spcname from pg_tablespace where spcname ='{{extra_storage_tablespace}}';"
-      register: tablespace
-      when: extra_storage
-
-    - name: create tablespace
-      sudo_user: postgres
-      command: psql -c "CREATE TABLESPACE {{extra_storage_tablespace}} OWNER {{db_user}} LOCATION '{{extra_storage_tablespace_dir}}';"
-      when: extra_storage and tablespace.stdout.find('0 rows') != -1
-
-    - name: check if database exists
-      sudo_user: postgres
-      command: psql -c "select 1 from pg_database where datname ='{{db_name}}';"
-      register: database_exists
-      when: extra_storage
-
-    - name: create osm database with tablespace
-      sudo_user: postgres
-      command: psql -c "CREATE database {{db_name}} OWNER {{db_user}} TABLESPACE {{extra_storage_tablespace}}"
-      when: extra_storage and database_exists.stdout.find('0 rows') != -1
-
-    - name: create osm database without tablespace
-      sudo_user: postgres
-      postgresql_db: name={{db_name}} owner={{db_user}}
-      when: not extra_storage
-
-    - name: enable postgis on osm database
-      sudo_user: postgres
-      command: psql -d {{db_name}} -c 'CREATE EXTENSION IF NOT EXISTS postgis;'
-
-    - name: enable hstore on osm database
-      sudo_user: postgres
-      command: psql -d {{db_name}} -c 'CREATE EXTENSION IF NOT EXISTS hstore;'
-
-    - name: make metro extract dir
-      file: path={{metro_tmp_dir}} recurse=yes state=directory
-      when: metro_extracts
-      sudo: no
-
-    - name: download metro extracts
-      get_url: url=https://s3.amazonaws.com/metro-extracts.mapzen.com/{{item}}.osm.pbf dest={{metro_tmp_dir}}/{{item}}.osm.pbf
-      with_items: metro_extracts
-      when: metro_extracts
-      sudo: no
-
-    - name: make geofabrik extract dirs
-      file: path={{geofabrik_tmp_dir}}/{{item | dirname}} recurse=yes state=directory
-      with_items: geofabrik_extracts
-      when: geofabrik_extracts
-      sudo: no
-
-    - name: download geofabrik extracts
-      get_url: url=http://download.geofabrik.de/{{item}}-latest.osm.pbf dest={{geofabrik_tmp_dir}}/{{item}}.osm.pbf
-      with_items: geofabrik_extracts
-      when: geofabrik_extracts
-      sudo: no
-
-    - name: write mapping.json file
-      template: src=templates/mapping.json dest={{mapping_json}}
-
-    - name: add metro extracts to imposm3 cache
-      command: "{{imposm3_bin}} import -connection postgis://osm:osm@localhost/osm -mapping {{mapping_json}} -read {{metro_tmp_dir}}/{{item}}.osm.pbf -appendcache -cachedir={{imposm3_cache_dir}}"
-      with_items: metro_extracts
-      when: metro_extracts
-
-    - name: add geofabrik extracts to imposm3 cache
-      command: "{{imposm3_bin}} import -connection postgis://osm:osm@localhost/osm -mapping {{mapping_json}} -read {{geofabrik_tmp_dir}}/{{item}}.osm.pbf -appendcache -cachedir={{imposm3_cache_dir}}"
-      with_items: geofabrik_extracts
-      when: geofabrik_extracts
-
-    - name: write OSM data to PostGIS
-      command: "{{imposm3_bin}} import -connection postgis://osm:osm@localhost/osm -mapping {{mapping_json}} -write -cachedir={{imposm3_cache_dir}} -dbschema-import={{db_schema}}"

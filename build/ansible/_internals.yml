@@ -1,4 +1,7 @@
 ---
+setup: true
+import: true
+
 osm_dir: /var/osm
 extra_storage_tablespace: "extra_storage"
 extra_storage_tablespace_dir: "{{osm_dir}}/postgresql-tablespace"
