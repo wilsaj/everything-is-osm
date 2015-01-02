@@ -21,12 +21,12 @@ RUN apt-get update && \
 RUN locale-gen en_US en_US.UTF-8
 RUN dpkg-reconfigure locales
 
-COPY variables.yml /variables.yml
-COPY docker/ansible_hosts /ansible_hosts
-COPY docker/bootstrap_ansible.sh /bootstrap_ansible.sh
-COPY docker/docker-entrypoint.sh /docker-entrypoint.sh
+COPY docker/everything-is-osm/ansible_hosts /ansible_hosts
+COPY docker/everything-is-osm/bootstrap_ansible.sh /bootstrap_ansible.sh
+COPY docker/everything-is-osm/docker-entrypoint.sh /docker-entrypoint.sh
 COPY ansible /ansible/
 
+COPY variables.yml /variables.yml
 RUN /bootstrap_ansible.sh
- 
+
 ENTRYPOINT /docker-entrypoint.sh
