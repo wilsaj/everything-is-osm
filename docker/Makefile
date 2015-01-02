@@ -5,11 +5,14 @@ all: docker-images
 
 docker-images: docker-everything-is-osm
 
-$(DOCKER_DIR)/%/ansible: ../ansible/
+%/ansible: ../ansible/
 	cp -r $< $@
 
-$(DOCKER_DIR)/%/variables.yml: ../variables.yml
+everything-is-osm/variables.yml: ../variables.yml
 	cp $< $@
 
-docker-%: $(DOCKER_DIR)/% $(DOCKER_DIR)/%/ansible $(DOCKER_DIR)/%/variables.yml
+everything-is-osm-tmpnb/variables.yml: ../variables.yml
+	cp $< $@
+
+docker-%: % %/ansible %/variables.yml
 	docker build -t $(DOCKER_PRE)$(notdir $(<D)) $<
