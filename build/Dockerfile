@@ -14,8 +14,7 @@ RUN apt-get update && \
         mercurial \
         postgresql-9.3 \
         postgresql-9.3-postgis-2.1 \
-        python-psycopg2 \
-        ssl-cert
+        python-psycopg2
 
 
 # grab gosu for easy step-down from root
