@@ -15,4 +15,4 @@ everything-is-osm-tmpnb/variables.yml: ../variables.yml
 	cp $< $@
 
 docker-%: % %/ansible %/variables.yml
-	docker build -t $(DOCKER_PRE)$(notdir $(<D)) $<
+	docker build -t $(DOCKER_PRE)$* $<
