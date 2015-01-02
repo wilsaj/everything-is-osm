@@ -1,2 +1,5 @@
 .vagrant/
 tmp/
+
+docker/*/ansible/
+docker/*/variables.yml
