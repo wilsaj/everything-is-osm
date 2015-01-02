@@ -1,10 +1,23 @@
-#!/bin/sh
+#!/bin/bash
 #
 # small script that bootstraps execution of ansible playbooks, for the benefit
 # of windows users
 
-EXTRA_STORAGE=$1
-OSM_DIR=$2
+ACTION=$1
+EXTRA_STORAGE=$2
+OSM_DIR=$3
+
+EXTRA_VARS=""
+
+for ACTION in "$@"
+do
+    if [ ${ACTION} = "import" ]; then
+        EXTRA_VARS=${EXTRA_VARS}"--extra-vars 'import=true' "
+    fi
+    if [ ${ACTION} = "setup" ]; then
+        EXTRA_VARS=${EXTRA_VARS}"--extra-vars 'setup=true' "
+    fi
+done
 
 #if [ ${EXTRA_STORAGE} = "1" ]; then
   #if [ ! -b /dev/sdb1 ]; then
@@ -16,8 +29,6 @@ OSM_DIR=$2
     #mount ${OSM_DIR}
   #fi
 #fi
-
-#apt-get update
 
 ## install ansible
 #apt-get -y install ansible
@@ -52,7 +63,4 @@ ssh-keyscan localhost > /root/.ssh/known_hosts
 # along in real time instead of all flushed at the very end
 export PYTHONUNBUFFERED=1
 
-
-# run the ansible playbook to start making things osm
-ansible-playbook -i /ansible_hosts /ansible/everything-is-osm.yml
-
+ansible-playbook -i /ansible_hosts ${EXTRA_VARS} /ansible/everything-is-osm.yml

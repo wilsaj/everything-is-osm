@@ -23,10 +23,11 @@ RUN dpkg-reconfigure locales
 
 COPY docker/everything-is-osm/ansible_hosts /ansible_hosts
 COPY docker/everything-is-osm/bootstrap_ansible.sh /bootstrap_ansible.sh
-COPY docker/everything-is-osm/docker-entrypoint.sh /docker-entrypoint.sh
 COPY ansible /ansible/
 
 COPY variables.yml /variables.yml
-RUN /bootstrap_ansible.sh
+RUN /bootstrap_ansible.sh setup import
 
-ENTRYPOINT /docker-entrypoint.sh
+COPY docker/everything-is-osm/docker-entrypoint.sh /docker-entrypoint.sh
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["import"]

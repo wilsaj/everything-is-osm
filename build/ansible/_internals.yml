@@ -1,6 +1,6 @@
 ---
-setup: true
-import: true
+setup: false
+import: false
 
 osm_dir: /var/osm
 extra_storage_tablespace: "extra_storage"
