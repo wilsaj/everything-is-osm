@@ -31,13 +31,13 @@ RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/* \
 RUN locale-gen en_US en_US.UTF-8
 RUN dpkg-reconfigure locales
 
-COPY docker/everything-is-osm/ansible_hosts /ansible_hosts
-COPY docker/everything-is-osm/bootstrap_ansible.sh /bootstrap_ansible.sh
+COPY ansible_hosts /ansible_hosts
+COPY bootstrap_ansible.sh /bootstrap_ansible.sh
 COPY ansible /ansible/
 
 COPY variables.yml /variables.yml
 RUN /bootstrap_ansible.sh setup import
 
-COPY docker/everything-is-osm/docker-entrypoint.sh /docker-entrypoint.sh
+COPY docker-entrypoint.sh /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["/usr/lib/postgresql/9.3/bin/postgres", "-D", "/var/lib/postgresql/9.3/main", "-c", "config_file=/etc/postgresql/9.3/main/postgresql.conf"]
