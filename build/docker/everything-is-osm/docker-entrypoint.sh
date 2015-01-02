@@ -1,10 +1,9 @@
 #!/bin/bash
 set -e
 
-service postgresql start
 
-if [ $1 = 'import' ]; then
-    /bootstrap_ansible.sh import
+if [ $1 = '/usr/lib/postgresql/9.3/bin/postgres' ]; then
+    gosu postgres "$@"
   else
     exec "$@"
 fi

@@ -1,6 +1,5 @@
 FROM ubuntu:14.04
 
-
 RUN apt-get update && \
     apt-get -y install \
         ansible  \
@@ -18,6 +17,18 @@ RUN apt-get update && \
         python-psycopg2 \
         ssl-cert
 
+
+# grab gosu for easy step-down from root
+RUN gpg --keyserver pgp.mit.edu --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/* \
+	&& curl -o /usr/local/bin/gosu -SL "https://github.com/tianon/gosu/releases/download/1.2/gosu-$(dpkg --print-architecture)" \
+	&& curl -o /usr/local/bin/gosu.asc -SL "https://github.com/tianon/gosu/releases/download/1.2/gosu-$(dpkg --print-architecture).asc" \
+	&& gpg --verify /usr/local/bin/gosu.asc \
+	&& rm /usr/local/bin/gosu.asc \
+	&& chmod +x /usr/local/bin/gosu \
+	&& apt-get purge -y --auto-remove curl
+
+
 RUN locale-gen en_US en_US.UTF-8
 RUN dpkg-reconfigure locales
 
@@ -30,4 +41,4 @@ RUN /bootstrap_ansible.sh setup import
 
 COPY docker/everything-is-osm/docker-entrypoint.sh /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["import"]
+CMD ["/usr/lib/postgresql/9.3/bin/postgres", "-D", "/var/lib/postgresql/9.3/main", "-c", "config_file=/etc/postgresql/9.3/main/postgresql.conf"]
