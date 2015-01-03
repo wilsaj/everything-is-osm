@@ -2,23 +2,6 @@ FROM jupyter/minimal
 
 USER root
 
-RUN apt-get update && \
-    apt-get -y install \
-        ansible  \
-        python-apt \
-        openssh-server \
-        golang \
-        git \
-        libgeos++-dev \
-        libleveldb-dev \
-        libprotobuf-dev \
-        libsqlite3-dev \
-        mercurial \
-        postgresql-9.3 \
-        postgresql-9.3-postgis-2.1 \
-        python-psycopg2
-
-
 # grab gosu for easy step-down from root
 RUN gpg --keyserver pgp.mit.edu --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4
 RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/* \
@@ -29,7 +12,6 @@ RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/* \
 	&& chmod +x /usr/local/bin/gosu \
 	&& apt-get purge -y --auto-remove curl
 
-
 RUN locale-gen en_US en_US.UTF-8
 RUN dpkg-reconfigure locales
 
@@ -38,7 +20,33 @@ COPY bootstrap_ansible.sh /bootstrap_ansible.sh
 COPY ansible /ansible/
 COPY variables.yml /variables.yml
 
-RUN /bootstrap_ansible.sh setup import
+RUN apt-get update \
+    && apt-get -y install \
+        ansible \
+        golang \
+        git \
+        libgeos++-dev \
+        libleveldb-dev \
+        libprotobuf-dev \
+        libsqlite3-dev \
+        mercurial \
+        openssh-server \
+        postgresql-9.3 \
+        postgresql-9.3-postgis-2.1 \
+        python-apt \
+        python-psycopg2 \
+    && /bootstrap_ansible.sh setup import \
+    && apt-get -y purge --auto-remove \
+        ansible \
+        git \
+        golang \
+        libgeos++-dev \
+        libleveldb-dev \
+        libprotobuf-dev \
+        libsqlite3-dev \
+        mercurial \
+        openssh-server \
+        python-apt
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
