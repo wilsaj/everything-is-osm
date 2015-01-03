@@ -1,0 +1,67 @@
+---
+  - name: install postgis packages
+    apt: pkg={{item}}
+    with_items: postgis_packages
+
+  - name: write postgres.conf file
+    template: src=templates/postgresql.conf.j2 dest=/etc/postgresql/9.3/main/postgresql.conf
+    notify: restart postgresql
+
+  - name: write pg_hba.conf file
+    template: src=templates/pg_hba.conf.j2 dest=/etc/postgresql/9.3/main/pg_hba.conf
+    notify: restart postgresql
+
+  - name: create .pgpass file
+    template: src=templates/pgpass.j2 dest=~/.pgpass mode=0600
+    sudo: no
+
+  - name: make sure postgres has started
+    service: name=postgresql state=started
+
+  - name: make osm dir
+    file: path={{osm_dir}} recurse=yes state=directory owner={{ansible_ssh_user}}
+
+  - name: create db user
+    sudo_user: postgres
+    postgresql_user: name={{db_user}}
+                     password={{db_password}}
+                     encrypted=false
+
+  - name: make tablespace dir
+    file: path={{extra_storage_tablespace_dir}} recurse=yes state=directory owner=postgres group=postgres
+    when: extra_storage
+
+  - name: check if tablespace exists
+    sudo_user: postgres
+    command: psql -c "select spcname from pg_tablespace where spcname ='{{extra_storage_tablespace}}';"
+    register: tablespace
+    when: extra_storage
+
+  - name: create tablespace
+    sudo_user: postgres
+    command: psql -c "CREATE TABLESPACE {{extra_storage_tablespace}} OWNER {{db_user}} LOCATION '{{extra_storage_tablespace_dir}}';"
+    when: extra_storage and tablespace.stdout.find('0 rows') != -1
+
+  - name: check if database exists
+    sudo_user: postgres
+    command: psql -c "select 1 from pg_database where datname ='{{db_name}}';"
+    register: database_exists
+    when: extra_storage
+
+  - name: create osm database with tablespace
+    sudo_user: postgres
+    command: psql -c "CREATE database {{db_name}} OWNER {{db_user}} TABLESPACE {{extra_storage_tablespace}}"
+    when: extra_storage and database_exists.stdout.find('0 rows') != -1
+
+  - name: create osm database without tablespace
+    sudo_user: postgres
+    postgresql_db: name={{db_name}} owner={{db_user}}
+    when: not extra_storage
+
+  - name: enable postgis on osm database
+    sudo_user: postgres
+    command: psql -d {{db_name}} -c 'CREATE EXTENSION IF NOT EXISTS postgis;'
+
+  - name: enable hstore on osm database
+    sudo_user: postgres
+    command: psql -d {{db_name}} -c 'CREATE EXTENSION IF NOT EXISTS hstore;'
