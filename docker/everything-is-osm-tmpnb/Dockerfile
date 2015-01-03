@@ -44,5 +44,7 @@ COPY docker-entrypoint.sh /docker-entrypoint.sh
 
 RUN pip install ipython-sql psycopg2
 
+ADD notebooks/ /home/jovyan/
+
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["/bin/bash"]
