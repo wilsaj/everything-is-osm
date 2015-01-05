@@ -48,9 +48,12 @@ RUN apt-get update \
         openssh-server \
         python-apt
 
-COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN pip install \
+    geojsonio \
+    ipython-sql \
+    psycopg2
 
-RUN pip install ipython-sql psycopg2
+COPY docker-entrypoint.sh /docker-entrypoint.sh
 
 ADD notebooks/ /home/jovyan/
 
