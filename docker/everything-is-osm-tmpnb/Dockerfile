@@ -51,7 +51,8 @@ RUN apt-get update \
 RUN pip install \
     geojsonio \
     ipython-sql \
-    psycopg2
+    psycopg2 \
+    shapely
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
