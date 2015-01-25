@@ -16,6 +16,10 @@ run-tmpnb:
 			   -v /var/run/docker.sock:/docker.sock \
 			   jupyter/tmpnb python orchestrate.py --image='wilsaj/everything-is-osm-tmpnb' --command="ipython3 notebook --NotebookApp.base_url={base_path} --ip=0.0.0.0 --port {port}" --pool_size=2
 
+
+run:
+	docker run -p 5432:5432 --rm -it wilsaj/everything-is-osm
+
 %/ansible: ../ansible/
 	cp -r $< $@
 
