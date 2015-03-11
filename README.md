@@ -41,9 +41,9 @@ Edit `variables.yml` so it contains the extracts that you want to include. For
 example:
 
     metro_extracts:
-      - "austin"
-      - "barcelona"
-      - "portland"
+      - "austin_texas"
+      - "barcelona_spain"
+      - "portland_oregon"
 
 or:
 
