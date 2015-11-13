@@ -120,3 +120,16 @@ from scratch.
 stopping the virtual machine. This can be slightly faster than a `vagrant
 reload` if new extracts have been added to `variables.yml` and those need to
 be imported.
+
+`vagrant ssh` can be used to login to the virtual machine via secure shell.
+This can be useful if something went wrong or you just want to poke around.
+
+
+### Super Advanced Additional Usage
+
+The virtual machine underneath all of this is an instance of the
+[Ubuntu 14.04](http://releases.ubuntu.com/14.04/) distribution.
+The majority of the work is done with [Ansible](http://docs.ansible.com/), 
+an open source configuration management system. With only a little bit of 
+fiddling, the scripts can be ported to work with another operating system 
+or run on a remote server. Please feel free to remix, reuse and enjoy!
